@@ -1,0 +1,2 @@
+ansi-colours==0.2.6
+terminal-table==0.3.1
