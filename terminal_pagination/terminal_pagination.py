@@ -24,8 +24,8 @@ class Pagination:
         while not result:
             print(self.paginated_table())
             print(self.pagination_text())
-            user_input = Input.get('\nEnter an %s, use %s and %s to navigate, or %s to go back: ' % (
-                Colour.green("'id'"),
+            user_input = Input.get('\nEnter an \'%s\', use %s and %s to navigate, or %s to go back: ' % (
+                Colour.green("id"),
                 Colour.green("<"),
                 Colour.green(">"),
                 Colour.green("b")
@@ -73,4 +73,6 @@ class Pagination:
 
 
 if __name__ == '__main__':
-    Pagination((('1', 'col_two_cell'), ('2', 'col_two_cell')), ('id', 'col_two_header'))()
+    arr = (('1', 'One'), ('2', 'Two'));
+    pick = Pagination(arr, ('ID', 'Header'))()
+    print('You chose: %s' % pick[1])
