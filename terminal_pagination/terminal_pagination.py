@@ -79,6 +79,7 @@ class Pagination:
 
 
 if __name__ == '__main__':
+    print("\n")
     arr = (
         ('Name One', 'Value One'),
         ('Name Two', 'Value Two'),
