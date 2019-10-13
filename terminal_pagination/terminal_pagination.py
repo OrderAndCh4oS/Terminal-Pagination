@@ -10,8 +10,8 @@ from underline import Underline
 class Pagination:
 
     def __init__(self, arr, headers):
-        self.arr = arr
-        self.headers = headers
+        self.arr = tuple((i+1, *a) for (i, a) in enumerate(arr))
+        self.headers = ('Key', *headers)
 
     def __call__(self, limit=5, find=None, find_by_id=None):
         self.limit = limit
@@ -30,7 +30,7 @@ class Pagination:
                 self.change_page(user_input)
                 continue
             if user_input not in [str(x) for x in range(1, len(self.arr) + 1)]:
-                Input.get("\n%s\nPress any key to continue.\n" % Colour.red("The ID entered was not found."))
+                Input.get("\n%s\nPress any key to continue.\n" % Colour.red("The Key entered was not found."))
                 continue
             result = self.arr[int(user_input) - 1]
         return result
@@ -61,8 +61,8 @@ class Pagination:
         return output
 
     def display_pagination_instructions(self):
-        return '\nEnter an \'%s\', use %s and %s to navigate, or %s to go back: ' % (
-            Colour.green("id"),
+        return '\nChoose a \'%s\' to select a row, use %s and %s to navigate, or %s to go back: ' % (
+            Colour.green("Key"),
             Colour.green("<"),
             Colour.green(">"),
             Colour.green("b")
@@ -79,6 +79,14 @@ class Pagination:
 
 
 if __name__ == '__main__':
-    arr = (('1', 'One'), ('2', 'Two'))
-    pick = Pagination(arr, ('ID', 'Header'))()
-    print('You chose: %s' % pick[1])
+    arr = (
+        ('Name One', 'Value One'),
+        ('Name Two', 'Value Two'),
+        ('Name Three', 'Value Three'),
+        ('Name Four', 'Value Four'),
+        ('Name Five', 'Value Five'),
+        ('Name Six', 'Value Six'),
+    )
+    pick = Pagination(arr, ('Name', 'Value'))(3)
+    if type(pick) is not bool:
+        print('You chose: %s' % pick[1])
