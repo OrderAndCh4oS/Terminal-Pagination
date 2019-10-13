@@ -17,29 +17,27 @@ class Pagination:
         self.limit = limit
         self.total = len(self.arr)
         self.page = 1
-        return self.menu()
+        return self.pagination()
 
-    def menu(self):
+    def pagination(self):
         result = False
         while not result:
-            print(self.paginated_table())
-            print(self.pagination_text())
-            user_input = Input.get('\nEnter an \'%s\', use %s and %s to navigate, or %s to go back: ' % (
-                Colour.green("id"),
-                Colour.green("<"),
-                Colour.green(">"),
-                Colour.green("b")
-            ))
+            self.display_pagination()
+            user_input = Input.get(self.display_pagination_instructions())
             if user_input == 'b':
                 break
             if self.should_change_page(user_input):
                 self.change_page(user_input)
                 continue
             if user_input not in [str(x) for x in range(1, len(self.arr) + 1)]:
+                Input.get("\n%s\nPress any key to continue.\n" % Colour.red("The ID entered was not found."))
                 continue
             result = self.arr[int(user_input) - 1]
-            print("An item with that key was not found. Press any key to continue.")
         return result
+
+    def display_pagination(self):
+        print(self.paginated_table())
+        print(self.pagination_text())
 
     def paginated_table(self):
         arr_start = (self.page * self.limit) - self.limit
@@ -62,6 +60,14 @@ class Pagination:
 
         return output
 
+    def display_pagination_instructions(self):
+        return '\nEnter an \'%s\', use %s and %s to navigate, or %s to go back: ' % (
+            Colour.green("id"),
+            Colour.green("<"),
+            Colour.green(">"),
+            Colour.green("b")
+        )
+
     def should_change_page(self, user_input):
         return user_input is '<' or user_input is '>'
 
@@ -73,6 +79,6 @@ class Pagination:
 
 
 if __name__ == '__main__':
-    arr = (('1', 'One'), ('2', 'Two'));
+    arr = (('1', 'One'), ('2', 'Two'))
     pick = Pagination(arr, ('ID', 'Header'))()
     print('You chose: %s' % pick[1])
