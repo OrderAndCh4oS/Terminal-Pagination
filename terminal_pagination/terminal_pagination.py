@@ -11,7 +11,7 @@ class Pagination:
 
     def __init__(self, arr, headers):
         self.arr = tuple((i+1, *a) for (i, a) in enumerate(arr))
-        self.headers = ('Key', *headers)
+        self.headers = ('', *headers)
 
     def __call__(self, limit=5, find=None, find_by_id=None):
         self.limit = limit
@@ -28,9 +28,10 @@ class Pagination:
                 break
             if self.should_change_page(user_input):
                 self.change_page(user_input)
+                print('\n')
                 continue
             if user_input not in [str(x) for x in range(1, len(self.arr) + 1)]:
-                Input.get("\n%s\nPress any key to continue.\n" % Colour.red("The Key entered was not found."))
+                Input.get("\n%s\nPress any key to continue.\n" % Colour.red("The row number entered was not found."))
                 continue
             result = self.arr[int(user_input) - 1]
         return result
@@ -44,25 +45,26 @@ class Pagination:
         arr_end = (self.page * self.limit)
         return Table.create(
             self.arr[arr_start:arr_end],
-            self.headers
+            self.headers,
+            column_colours=(Colour.green,)
         )
 
     def pagination_text(self):
         text = ""
+        length = 0
         if self.page > 1:
-            text += "< previous | "
-        text += "page %d" % self.page
+            text += f"{Colour.green('<')} previous | "
+            length += 11
+        text += "%d" % self.page
         if self.page * self.limit < self.total:
-            text += " | next >"
-        output = Underline.create(text)
-        output += "\n%s\n" % text
-        output += Underline.create(text)
+            text += f" | next {Colour.green('>')}"
+            length += 11
 
-        return output
+        return f"{Underline.create(len(text) - length)}\n{text}\n{Underline.create(len(text) - length)}"
 
     def display_pagination_instructions(self):
         return '\nChoose a \'%s\' to select a row, use %s and %s to navigate, or %s to go back: ' % (
-            Colour.green("Key"),
+            Colour.green("number"),
             Colour.green("<"),
             Colour.green(">"),
             Colour.green("b")
@@ -89,7 +91,7 @@ if __name__ == '__main__':
         ('Name Five', long_text[:32]),
         ('Name Six', long_text[:20]),
     )
-    pick = Pagination(arr, ('Name', 'Value'))(3)
+    pick = Pagination(arr, ('Name', 'Value'))(2)
     if type(pick) is not bool:
         print('You chose: %s' % pick[1])
 
