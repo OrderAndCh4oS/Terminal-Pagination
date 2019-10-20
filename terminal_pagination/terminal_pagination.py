@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from ansi_colours import AnsiColours as Colour
-from terminal_table.table import Table
+from terminal_table import Table
 
 from input import Input
 from underline import Underline
@@ -79,14 +79,18 @@ class Pagination:
 
 
 if __name__ == '__main__':
+    long_text = 'Zombie ipsum brains reversus ab cerebellum viral inferno, brein nam rick mend grimes malum cerveau cerebro.'
+
     arr = (
-        ('Name One', 'Value One'),
-        ('Name Two', 'Value Two'),
-        ('Name Three', 'Value Three'),
-        ('Name Four', 'Value Four'),
-        ('Name Five', 'Value Five'),
-        ('Name Six', 'Value Six'),
+        ('Name One', long_text[:30]),
+        ('Name Two', long_text[:21]),
+        ('Name Three', long_text[:35]),
+        ('Name Four', long_text[:45]),
+        ('Name Five', long_text[:32]),
+        ('Name Six', long_text[:20]),
     )
     pick = Pagination(arr, ('Name', 'Value'))(3)
     if type(pick) is not bool:
         print('You chose: %s' % pick[1])
+
+
